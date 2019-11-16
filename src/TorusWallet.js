@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import Torus from '@toruslabs/torus-embed';
 import Web3 from 'web3';
 import { HTLC_ABI } from './web3/htlc-abi';
 
 const HTLC_ROPSTEN = '0x243785f6B65418191ea20B45FdE7069ffe4F8ceF';
 
-export default function TorusWallet() {
+export default function TorusWallet({ provideWeb3 }) {
 
   const [isTorus, setIsTorus] = useState(sessionStorage.getItem('pageUsingTorus'));
   const [web3, setWeb3] = useState();
@@ -21,7 +22,7 @@ export default function TorusWallet() {
         const torus = new Torus();
         await torus.init({
           network: {
-            host: 'ropsten',
+            host: process.env.REACT_APP_TORUS_NETWORK_HOST || 'ropsten',
           }
         });
         await torus.login();
@@ -32,6 +33,7 @@ export default function TorusWallet() {
         const htlcContract = new web3Instance.eth.Contract(HTLC_ABI, HTLC_ROPSTEN);
 
         setWeb3(web3Instance);
+        provideWeb3(web3Instance);
         setAccount(accounts[0]);
         setBalance(web3Instance.utils.fromWei(balance.toString(), 'ether'));
         setHtlc(htlcContract);
@@ -77,3 +79,7 @@ export default function TorusWallet() {
     </div>
   )
 }
+
+TorusWallet.propTypes = {
+  provideWeb3: PropTypes.func.isRequired,
+};
