@@ -7,7 +7,7 @@ import { withdraw } from './web3/htlc';
 
 export default function Receive({ web3 }) {
 
-  const [contractId, setContractId] = useState();
+  const [contractId, setContractId] = useState('');
   const [secret, setSecret] = useState('');
   const [receiver, setReceiver] = useState('');
 

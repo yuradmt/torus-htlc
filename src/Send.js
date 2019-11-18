@@ -26,34 +26,34 @@ export default function Send({ web3 }) {
   const sendFunds = async web3 => {
     console.log(`Sender is ${sender}`);
     console.log(`Receiver is ${receiver}`);
-    const isValid = web3.utils.isAddress(receiver);
-    console.log(`Address is valid: ${isValid}`);
-    console.log(`Amount is ${amount}`);
     console.log(`Secret phrase is ${secret}.`);
-    console.log(`Soliditysha3 is ${web3.utils.soliditySha3(secret)}`);
+    const b32Secret = web3.utils.asciiToHex(secret);
+    const abijsB32Secret = abi.soliditySHA3(['bytes32'], [b32Secret]).toString('hex');
+    console.log(`bytes32 secret: ${b32Secret}`);
+    console.log(`abi-js packed b32secret: ${abijsB32Secret}`);
 
     const value = web3.utils.toWei(amount.toString(), 'ether');
-    const hashlock = web3.utils.soliditySha3(secret);
+    const hashlock = '0x' + abijsB32Secret;
     const timelock = Date.now() + 1000 * 60 * 60 * 24; // 24 hours
 
-    //const contractId = web3.utils.soliditySha3(sender, receiver, value, hashlock, timelock);
-    const BN = web3.utils.BN;
-    const contractId = abi.soliditySHA3(
-      ['address', 'address', 'uint', 'bytes32', 'uint'],
-      [new BN(sender), new BN(receiver), value, hashlock, timelock]
-    );
+    // //const contractId = web3.utils.soliditySha3(sender, receiver, value, hashlock, timelock);
+    // //const BN = web3.utils.BN;
+    // const contractId = web3.utils.soliditySha3(abi.soliditySHA3(
+    //   ['address', 'address', 'uint', 'bytes32', 'uint'],
+    //   [sender, receiver, value, hashlock, timelock]
+    // ));
 
-    // contractId = sha256(
-    //   abi.encodePacked(
-    //       msg.sender,
-    //       _receiver,
-    //       msg.value,
-    //       _hashlock,
-    //       _timelock
-    //   )
-    //);
+    // // contractId = sha256(
+    // //   abi.encodePacked(
+    // //       msg.sender,
+    // //       _receiver,
+    // //       msg.value,
+    // //       _hashlock,
+    // //       _timelock
+    // //   )
+    // //);
 
-    console.log(`Contract id is ${contractId.toString('hex')}`);
+    // console.log(`Contract id is ${contractId.toString('hex')}`);
 
     subscribe(setContractId);
     const txnHash = await newContract(web3, sender, receiver, hashlock, timelock, amount);

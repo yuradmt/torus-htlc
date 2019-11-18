@@ -1,7 +1,9 @@
 import Web3 from 'web3';
 import { HTLC_ABI } from './htlc-abi';
 
-const HTLC_ROPSTEN = '0x243785f6B65418191ea20B45FdE7069ffe4F8ceF';
+//const HTLC_ROPSTEN = '0x243785f6B65418191ea20B45FdE7069ffe4F8ceF';
+
+const HTLC_ROPSTEN = '0x6beaf9f3fc9cfac80f900109859bf219eb5d2ab6';
 
 export const newContract = async (web3, sender, receiver, hashlock, timelock, amount) => {
 
