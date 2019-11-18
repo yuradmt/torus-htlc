@@ -28,7 +28,7 @@ export default function Send({ web3 }) {
     console.log(`Receiver is ${receiver}`);
     console.log(`Secret phrase is ${secret}.`);
     const b32Secret = web3.utils.asciiToHex(secret);
-    const abijsB32Secret = abi.soliditySHA3(['bytes32'], [b32Secret]).toString('hex');
+    const abijsB32Secret = abi.soliditySHA256(['bytes32'], [b32Secret]).toString('hex');
     console.log(`bytes32 secret: ${b32Secret}`);
     console.log(`abi-js packed b32secret: ${abijsB32Secret}`);
 
