@@ -4,4 +4,6 @@ The app is deployed on [Netlify](https://laughing-stonebraker-01b171.netlify.com
 
 To use the demo, create a new HTLC contract from the Send page. Once the transaction is confirmed, you will see the contract ID. To withdraw funds, the receiver needs to provide this contract ID and the secret phrase/password on the Receive page.
 
+Screen recording of the demo is [here](https://www.youtube.com/watch?v=ioBUzff77vk) - sorry for the low quality.
+
 Refund is not implemented for this demo.
