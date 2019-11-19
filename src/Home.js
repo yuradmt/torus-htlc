@@ -20,7 +20,7 @@ export default function Home() {
         Usage: On the "Send" page, you can send funds protected by a password or a secret phrase.
       </p>
       <p>
-        The receiver must specify the secret to withdraw funds on the "Receive" page. The Contract ID has be retrieved by pressing on the "Find Contract Id" button, or entered manually (assuming the sender has provided it together with the secret). "Find Contract Id" will find the first "live" contract ID committed to this receiver.
+        The receiver must specify the secret to withdraw funds on the "Receive" page. The Contract ID is obtained by clicking on the "Find Contract Id" button, or entered manually (assuming the sender has provided it with the secret). "Find Contract Id" will find the most recent "live" contract ID committed to this receiver.
       </p>
     </Jumbotron>
   )
