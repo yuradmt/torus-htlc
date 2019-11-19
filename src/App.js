@@ -73,9 +73,9 @@ function App() {
       </Container>
       <TorusWallet provideWeb3={setWeb3} provideAccount={setAccount} provideBalance={setBalance} />
       <Navbar fixed="bottom" style={{ marginTop: "20px" }}>
-        <LinkContainer to="https://github.com/borxes/torus-htlc">
+        <a href="https://github.com/borxes/torus-htlc">
           <Navbar.Brand>Source code on Github</Navbar.Brand>
-        </LinkContainer>
+        </a>
         <Nav variant="pills" className="justify-content-end">
           <Nav.Item>
             By Yura Sherman (c)2019
