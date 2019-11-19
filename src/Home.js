@@ -16,6 +16,12 @@ export default function Home() {
       <p>
         <Button variant="primary" href="https://tor.us" target="_blank">Learn more about Torus</Button>
       </p>
+      <p>
+        Usage: On the "Send" page, you can send funds protected by a password or a secret phrase. Note the contract Id that appears and pass it to the receiver together with the password/secret.
+      </p>
+      <p>
+        The receiver must specify contract ID and the secret to withdraw funds on the "Receive" page.
+      </p>
     </Jumbotron>
   )
 }

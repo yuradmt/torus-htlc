@@ -13,11 +13,15 @@ import Receive from './Receive';
 
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
 
   const [web3, setWeb3] = useState();
+  const [account, setAccount] = useState('');
+  const [balance, setBalance] = useState('')
 
   return (
 
@@ -42,10 +46,16 @@ function App() {
               <Nav.Link eventKey="receive">Receive</Nav.Link>
             </LinkContainer>
           </Nav.Item>
+          <Nav.Item>
+            <Nav.Link disabled>Account: {account}</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link disabled style={{ float: 'right' }}>Balance: {balance}</Nav.Link>
+          </Nav.Item>
         </Nav>
       </Navbar>
-      <div className="container-fluid" style={{ marginTop: "20px" }}>
-        <div className="row">
+      <Container>
+        <Row>
           <main role="main" className="col-lg-12 d-flex justify-content-center">
             <Switch>
               <Route exact path={['/', '/home']}>
@@ -59,9 +69,20 @@ function App() {
               </Route>
             </Switch>
           </main>
-        </div>
-      </div>
-      <TorusWallet provideWeb3={setWeb3} />
+        </Row>
+      </Container>
+      <TorusWallet provideWeb3={setWeb3} provideAccount={setAccount} provideBalance={setBalance} />
+      <Navbar fixed="bottom" style={{ marginTop: "20px" }}>
+        <LinkContainer to="https://github.com/borxes/torus-htlc">
+          <Navbar.Brand>Source code on Github</Navbar.Brand>
+        </LinkContainer>
+        <Nav variant="pills" className="justify-content-end">
+          <Nav.Item>
+            By Yura Sherman (c)2019
+          </Nav.Item>
+        </Nav>
+      </Navbar>
+
     </Router >
 
   );

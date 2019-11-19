@@ -13,8 +13,10 @@ export default function Receive({ web3 }) {
 
   useEffect(() => {
     const fetchAccount = async () => {
-      const accounts = await web3.eth.getAccounts();
-      accounts && setReceiver(accounts[0]);
+      if (web3) {
+        const accounts = await web3.eth.getAccounts();
+        accounts && setReceiver(accounts[0]);
+      }
     };
     fetchAccount();
   }, [web3]);
@@ -32,7 +34,6 @@ export default function Receive({ web3 }) {
 
 
   return (
-    <>
       <Form>
         <Form.Group controlId="ReceiveEth">
           <Form.Label>Contract Id</Form.Label>
@@ -60,11 +61,15 @@ export default function Receive({ web3 }) {
           </Form.Text>
         </Form.Group>
 
-        <Button variant="primary" type="submit" onClick={e => { e.preventDefault(); receiveFunds(web3); }}>
-          Receive Funds
+        <Button
+          variant="primary"
+          type="submit"
+          onClick={e => { e.preventDefault(); receiveFunds(web3); }}
+          disabled={web3 === undefined}
+        >
+          {web3 ? 'Receive Funds' : "Please login to Torus"}
         </Button>
       </Form>
-    </>
   );
 }
 

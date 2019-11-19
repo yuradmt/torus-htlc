@@ -17,9 +17,11 @@ export default function Send({ web3 }) {
 
   useEffect(() => {
     const fetchAccount = async () => {
-      const accounts = await web3.eth.getAccounts();
-      accounts && setSender(accounts[0]);
-    };
+      if (web3) {
+        const accounts = await web3.eth.getAccounts();
+        accounts && setSender(accounts[0]);
+      }
+    }
     fetchAccount();
   }, [web3]);
 
@@ -32,28 +34,22 @@ export default function Send({ web3 }) {
     console.log(`bytes32 secret: ${b32Secret}`);
     console.log(`abi-js packed b32secret: ${abijsB32Secret}`);
 
-    const value = web3.utils.toWei(amount.toString(), 'ether');
     const hashlock = '0x' + abijsB32Secret;
     const timelock = Date.now() + 1000 * 60 * 60 * 24; // 24 hours
 
-    // //const contractId = web3.utils.soliditySha3(sender, receiver, value, hashlock, timelock);
-    // //const BN = web3.utils.BN;
-    // const contractId = web3.utils.soliditySha3(abi.soliditySHA3(
-    //   ['address', 'address', 'uint', 'bytes32', 'uint'],
-    //   [sender, receiver, value, hashlock, timelock]
-    // ));
+    // contractId = sha256(
+    //   abi.encodePacked(
+    //       msg.sender,
+    //       _receiver,
+    //       msg.value,
+    //       _hashlock,
+    //       _timelock
+    //   )
+    //);
 
-    // // contractId = sha256(
-    // //   abi.encodePacked(
-    // //       msg.sender,
-    // //       _receiver,
-    // //       msg.value,
-    // //       _hashlock,
-    // //       _timelock
-    // //   )
-    // //);
+    // setContractId(tempContractId);
 
-    // console.log(`Contract id is ${contractId.toString('hex')}`);
+    // console.log(`Contract id is ${contractId} ${tempContractId.toString('hex')}`);
 
     subscribe(setContractId);
     const txnHash = await newContract(web3, sender, receiver, hashlock, timelock, amount);
@@ -62,50 +58,55 @@ export default function Send({ web3 }) {
 
 
   return (
-    <>
-      <Form>
-        <Form.Group controlId="sendEth">
-          <Form.Label>Receiver's address</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="ETH address"
-            value={receiver}
-            onChange={event => { setReceiver(event.target.value); }}
-          />
-          <Form.Text className="text-muted">
-            Please make sure that the address is correct
+    <Form>
+      <Form.Group controlId="sendEth">
+        <Form.Label>Receiver's address</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="ETH address"
+          value={receiver}
+          onChange={event => { setReceiver(event.target.value); }}
+        />
+        <Form.Text className="text-muted">
+          Please make sure that the address is correct
           </Form.Text>
-        </Form.Group>
+      </Form.Group>
 
-        <Form.Group controlId="Amount">
-          <Form.Label>Amount</Form.Label>
-          <Form.Control
-            type="number"
-            placeholder="Amount"
-            value={amount}
-            onChange={event => { setAmount(event.target.value); }}
-          />
-        </Form.Group>
+      <Form.Group controlId="Amount">
+        <Form.Label>Amount</Form.Label>
+        <Form.Control
+          type="number"
+          placeholder="Amount"
+          value={amount}
+          onChange={event => { setAmount(event.target.value); }}
+        />
+      </Form.Group>
 
-        <Form.Group controlId="Secret Phrase">
-          <Form.Label>Secret Phrase</Form.Label>
-          <Form.Control
-            type="text"
-            value={secret}
-            placeholder="Secret phrase"
-            onChange={event => { setSecret(event.target.value); }}
-          />
-          <Form.Text className="text-muted">
-            This secret phrase protects the transaction. The receiver must supply it in order to receive the funds.
+      <Form.Group controlId="Secret Phrase">
+        <Form.Label>Secret Phrase</Form.Label>
+        <Form.Control
+          type="text"
+          value={secret}
+          placeholder="Secret phrase"
+          onChange={event => { setSecret(event.target.value); }}
+        />
+        <Form.Text className="text-muted">
+          This secret phrase protects the transaction. The receiver must supply it in order to receive the funds.
           </Form.Text>
-        </Form.Group>
+      </Form.Group>
 
-        <Button variant="primary" type="submit" onClick={e => { e.preventDefault(); sendFunds(web3); }}>
-          Send Funds
-        </Button>
-      </Form>
-      <div>Contract ID: {contractId}</div>
-    </>
+      <Button
+        variant="primary"
+        type="submit"
+        onClick={e => { e.preventDefault(); sendFunds(web3); }}
+        disabled={web3 === undefined}
+      >
+        {web3 ? 'Send Funds' : "Please login to Torus"}
+      </Button>
+      <Form.Text className="text-center font-weight-bold">
+        {contractId && <div><p>Contract ID: {contractId}</p><p> Receiver must specify this contract ID when withdrawing</p></div>}
+      </Form.Text>
+    </Form>
   );
 }
 
